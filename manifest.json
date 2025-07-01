@@ -1,0 +1,38 @@
+{
+  "manifest_version": 3,
+  "name": "YT Speedrun Timer",
+  "version": "2.0",
+  "description": "Precisely time speedrun segments on YouTube using debug info.",
+  "icons": {
+    "48": "icons/icon-48.png",
+    "96": "icons/icon-96.png"
+  },
+  "permissions": [
+    "storage",
+    "scripting",
+    "clipboardWrite",
+    "tabs"
+  ],
+  "host_permissions": [
+    "*://*.youtube.com/*"
+  ],
+  "background": {
+    "scripts": ["scripts/background.js"]
+  },
+  "options_ui": {
+    "page": "options/options.html",
+    "open_in_tab": true
+  },
+  "action": {
+    "default_icon": {
+      "48": "icons/icon-48.png"
+    },
+    "default_title": "YT Speedrun Timer",
+    "default_popup": "options/options.html"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "yt-speedrun-timer@example.com"
+    }
+  }
+}
