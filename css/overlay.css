@@ -1,0 +1,164 @@
+/* css/overlay.css */
+
+#yt-speedrun-timer-container {
+    position: fixed;
+    top: 66px;
+    left: 10px;
+    width: 350px;
+    background-color: rgba(15, 15, 15, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: #f1f1f1;
+    font-family: 'Roboto', 'Arial', sans-serif;
+    font-size: 14px;
+    padding: 12px;
+    z-index: 9999;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    user-select: none;
+    transition: border-color 0.3s;
+}
+
+#yt-speedrun-timer-container.finished {
+    border-color: #3ea6ff;
+}
+
+.srt-title {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.srt-time-display {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    font-family: 'Roboto Mono', monospace;
+}
+
+/* Flashing animation for active timer - More "Violent" */
+@keyframes srt-pulse-violent {
+    0%   { opacity: 1; color: #66ff99; }
+    40%  { opacity: 0.2; color: #f1f1f1; }
+    80%  { opacity: 1; color: #66ff99; }
+    100% { opacity: 1; color: #66ff99; }
+}
+
+#srt-current-segment-time.srt-current-time-active {
+    animation: srt-pulse-violent 1.2s infinite ease-in-out;
+}
+
+.srt-time-display span:first-child {
+    color: #aaa;
+}
+
+.srt-time-display span:last-child {
+    font-weight: 500;
+    color: #fff;
+}
+
+.srt-splits-container {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.srt-splits-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+#srt-copy-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+#srt-copy-button svg {
+    fill: #aaa;
+    width: 18px;
+    height: 18px;
+    transition: fill 0.2s;
+}
+
+#srt-copy-button:hover svg {
+    fill: #fff;
+}
+
+#srt-copy-confirm {
+    position: absolute;
+    right: 25px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #272727;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+#srt-copy-confirm.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+#srt-splits-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 13px;
+}
+
+#srt-splits-list li {
+    padding: 4px 2px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+#srt-splits-list li:last-child {
+    border-bottom: none;
+}
+
+.srt-split-name {
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 3px;
+    transition: background-color 0.2s;
+}
+.srt-split-name:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+.srt-split-name[contenteditable="true"] {
+    background-color: #fff;
+    color: #111;
+    outline: 2px solid #3ea6ff;
+    cursor: text;
+}
+
+.srt-debug-log {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 12px;
+    color: #ccc;
+    font-family: 'Roboto Mono', monospace;
+}
+.srt-debug-log strong {
+    color: #f1f1f1;
+}
+
+#srt-debug-message {
+    color: #8eff8e;
+}

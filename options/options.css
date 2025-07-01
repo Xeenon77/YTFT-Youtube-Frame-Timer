@@ -1,0 +1,183 @@
+/* options/options.css */
+body {
+    font-family: 'Roboto', 'Arial', sans-serif;
+    background-color: #181818;
+    color: #f1f1f1;
+    padding: 20px;
+    margin: 0;
+    min-width: 500px;
+}
+
+.container {
+    max-width: 650px;
+    margin: 0 auto;
+    background-color: #212121;
+    padding: 30px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+header {
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+}
+
+h1 {
+    font-size: 28px;
+    margin: 0;
+    color: #fff;
+}
+
+p {
+    font-size: 15px;
+    color: #aaa;
+    margin-top: 5px;
+    margin-bottom: 0;
+}
+
+.settings-section {
+    margin-bottom: 40px;
+}
+
+h2 {
+    font-size: 22px;
+    color: #fff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+h3 {
+    font-size: 18px;
+    color: #f1f1f1;
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+p.description {
+    font-size: 13px;
+    color: #888;
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
+
+.keybind-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 15px 20px;
+    align-items: center;
+}
+
+label {
+    font-weight: 500;
+}
+
+.keybind-input, select, textarea {
+    background-color: #121212;
+    color: #f1f1f1;
+    border: 1px solid #3e3e3e;
+    border-radius: 4px;
+    padding: 10px 14px;
+    font-size: 16px;
+    font-family: 'Roboto Mono', monospace;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.keybind-input {
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+textarea {
+    width: 100%;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+select {
+    width: 100%;
+}
+
+.keybind-input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #3ea6ff;
+    box-shadow: 0 0 0 2px rgba(62, 166, 255, 0.3);
+}
+
+.preset-manager {
+    background-color: #272727;
+    padding: 20px;
+    border-radius: 6px;
+    border: 1px solid #3e3e3e;
+}
+
+.preset-selectors {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.preset-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+button {
+    padding: 10px 15px;
+    border: 1px solid #3e3e3e;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    background-color: #333;
+    color: #f1f1f1;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+button:hover {
+    background-color: #444;
+    border-color: #555;
+}
+
+button.primary, #save-button {
+    background-color: #3ea6ff;
+    border-color: #3ea6ff;
+    color: #fff;
+    font-weight: bold;
+}
+button.primary:hover, #save-button:hover {
+    background-color: #1e88e5;
+}
+
+button.danger {
+    background-color: #272727;
+    border-color: #c93c3c;
+    color: #ff8a8a;
+}
+button.danger:hover {
+    background-color: #c93c3c;
+    border-color: #c93c3c;
+    color: #fff;
+}
+
+.footer-actions {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#status {
+    color: #66ff99;
+    font-weight: bold;
+    height: 20px;
+    flex-grow: 1;
+    text-align: right;
+}

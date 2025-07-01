@@ -1,0 +1,69 @@
+<!-- options/options.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YT Speedrun Timer Settings</title>
+    <link rel="stylesheet" href="options.css">
+    <meta charset="utf-8">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>YT Speedrun Timer</h1>
+            <p>Configure your keybindings and split presets.</p>
+        </header>
+
+        <section class="settings-section">
+            <h2>Keybindings</h2>
+            <div class="keybind-grid">
+                <label for="startReset">Start / Reset Run:</label>
+                <input type="text" id="startReset" class="keybind-input" readonly>
+
+                <label for="startSegment">Start Segment:</label>
+                <input type="text" id="startSegment" class="keybind-input" readonly>
+                
+                <label for="endSegment">End Segment / Split:</label>
+                <input type="text" id="endSegment" class="keybind-input" readonly>
+                
+                <label for="endRun">End Run & Copy:</label>
+                <input type="text" id="endRun" class="keybind-input" readonly>
+            </div>
+        </section>
+
+        <section class="settings-section">
+            <h2>Split Presets & Copy Settings</h2>
+            
+            <label for="copyHeaderText">Header Text for Copying</label>
+            <p class="description">This text will be added to the top of the output when you copy your times.</p>
+            <textarea id="copyHeaderText" rows="3"></textarea>
+            
+            <div class="preset-manager">
+                <h3>Preset Management</h3>
+                <p class="description">Select a preset group and a sub-preset to use for your splits. The selected list will be used by the timer.</p>
+                
+                <div class="preset-selectors">
+                    <select id="preset-group-select"></select>
+                    <select id="sub-preset-select"></select>
+                </div>
+
+                <div class="preset-actions">
+                    <button id="add-group-btn">New Group</button>
+                    <button id="add-sub-preset-btn">New Sub-Preset</button>
+                    <button id="rename-btn">Rename</button>
+                    <button id="delete-btn" class="danger">Delete</button>
+                </div>
+                
+                <textarea id="splitNamePresets" rows="8" placeholder="Enter one split name per line for the selected preset..."></textarea>
+            </div>
+
+        </section>
+
+        <div class="footer-actions">
+            <button id="save-button" class="primary">Save All Settings</button>
+            <button id="reset-button">Reset to Defaults</button>
+            <div id="status"></div>
+        </div>
+    </div>
+    <script src="options.js"></script>
+</body>
+</html>
