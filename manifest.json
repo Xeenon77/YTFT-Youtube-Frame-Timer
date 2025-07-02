@@ -27,8 +27,7 @@
     "default_icon": {
       "48": "icons/icon-48.png"
     },
-    "default_title": "YT Speedrun Timer",
-    "default_popup": "options/options.html"
+    "default_title": "YT Speedrun Timer"
   },
   "browser_specific_settings": {
     "gecko": {

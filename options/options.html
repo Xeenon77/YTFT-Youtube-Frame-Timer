@@ -39,7 +39,13 @@
             
             <div class="preset-manager">
                 <h3>Preset Management</h3>
-                <p class="description">Select a preset group and a sub-preset to use for your splits. The selected list will be used by the timer.</p>
+                <p class="description">Select a preset group and a sub-preset to use for your splits. You can also import/export all presets to a file for easy editing and backup.</p>
+
+                <div class="io-actions">
+                    <button id="import-btn">Import from File...</button>
+                    <button id="export-btn">Export to File...</button>
+                    <input type="file" id="import-file-input" accept=".json" style="display: none;">
+                </div>
                 
                 <div class="preset-selectors">
                     <select id="preset-group-select"></select>

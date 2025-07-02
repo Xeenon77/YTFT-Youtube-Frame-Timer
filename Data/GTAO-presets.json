@@ -1,0 +1,140 @@
+{
+  "active": {
+    "group": "Original Heists",
+    "sub": "Fleeca Job"
+  },
+  "data": {
+    "Original Heists": {
+      "Fleeca Job": [
+        "Scope Out",
+        "Kuruma",
+        "Finale"
+      ],
+      "Prison Break": [
+        "Plane",
+        "Bus",
+        "Station",
+        "Wet Work",
+        "Finale"
+      ],
+      "Humane Labs Raid": [
+        "Key Codes",
+        "Insurgents",
+        "EMP",
+        "Valkyrie",
+        "Deliver EMP",
+        "Finale"
+      ],
+      "Series A Funding": [
+        "Coke",
+        "Trash Truck",
+        "Bikers",
+        "Weed",
+        "Steal Meth",
+        "Finale"
+      ],
+      "Pacific Standard Job": [
+        "Vans",
+        "Signal",
+        "Hack",
+        "Convoy",
+        "Bikes",
+        "Finale"
+      ]
+    },
+    "The Doomsday Heist": {
+      "Act I: The Data Breaches": [
+        "Setup 1",
+        "Setup 2",
+        "Setup 3",
+        "Finale"
+      ],
+      "Act II: The Bogdan Problem": [
+        "Setup 1",
+        "Setup 2",
+        "Setup 3",
+        "Setup 4",
+        "Finale"
+      ],
+      "Act III: The Doomsday Scenario": [
+        "Setup 1",
+        "Setup 2",
+        "Setup 3",
+        "Setup 4",
+        "Setup 5",
+        "Setup 6",
+        "Finale"
+      ]
+    },
+    "The Diamond Casino Heist": {
+      "Aggressive": [
+        "Setup",
+        "Entrance",
+        "Escape"
+      ],
+      "Big Con": [
+        "Setup",
+        "Entrance",
+        "Escape"
+      ],
+      "Silent & Sneaky": [
+        "Setup",
+        "Entrance",
+        "Escape"
+      ]
+    },
+    "The Cayo Perico Heist": {
+      "Solo": [
+        "Intel",
+        "Prep",
+        "Finale"
+      ],
+      "Duo+": [
+        "Intel",
+        "Prep",
+        "Finale"
+      ]
+    },
+    "The Contract": {
+      "Any%": [
+        "Investivation 1",
+        "Investivation 2",
+        "Investivation 3",
+        "Finale"
+      ]
+    },
+    "Cluckin' Bell Farm Raid": {
+      "Any%": [
+        "Setup 1",
+        "Setup 2",
+        "Finale"
+      ]
+    },
+    "Miscellaneous & Missions": {
+      "All Casino Missions": [
+        "Mission 1",
+        "Mission 2",
+        "Mission 3",
+        "Mission 4",
+        "Mission 5",
+        "Mission 6"
+      ],
+      "All Superyacht Life Missions": [
+        "Mission 1",
+        "Mission 2",
+        "Mission 3",
+        "Mission 4",
+        "Mission 5",
+        "Mission 6"
+      ],
+      "All Project Overthrow Missions": [
+        "Mission 1",
+        "Mission 2",
+        "Mission 3",
+        "Mission 4",
+        "Mission 5",
+        "Mission 6"
+      ]
+    }
+  }
+}

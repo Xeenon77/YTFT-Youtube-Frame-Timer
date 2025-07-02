@@ -222,13 +222,16 @@
                 if(s.presets.data && s.presets.data[group] && s.presets.data[group][sub]){
                     splitNamePresets = s.presets.data[group][sub];
                 }
+                logDebug("Ready. Using preset: " + `${group} > ${sub}`);
             } else {
                 splitNamePresets = [];
+                logDebug("Ready. No presets found.");
             }
-            logDebug("Ready. Using preset: " + (s.presets ? `${s.presets.active.group} > ${s.presets.active.sub}` : "None"));
         } catch(e) {
             logDebug(`Storage Error. Using defaults.`, true);
             keybindings = defaultKeybindings;
+            splitNamePresets = [];
+            copyHeaderText = "";
         }
 
         document.addEventListener('keydown', (e) => {

@@ -7,33 +7,36 @@ function getPageData() {
     if (player && typeof player.getCurrentTime === 'function') {
         try {
             const stats = player.getStatsForNerds();
-            // Prefer the more precise 'cmt' time, but fallback to currentTime
             return {
                 time: stats?.cmt || player.getCurrentTime(),
                 videoId: stats?.docid || null
             };
         } catch (e) {
-            // Fallback if getStatsForNerds fails for any reason
             return { time: player.getCurrentTime(), videoId: null };
         }
     }
     return { time: null, videoId: null };
 }
 
+// --- NEW: Open options page in a tab when the toolbar icon is clicked ---
+browser.action.onClicked.addListener((tab) => {
+    browser.runtime.openOptionsPage();
+});
+
 // Listen for messages from the content script
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    // Check if the message is our request for the time
     if (message.type === 'getTimeRequest') {
         const tabId = sender.tab.id;
 
-        // Use the scripting API to execute our function in the page
         browser.scripting.executeScript({
             target: { tabId: tabId },
             func: getPageData,
             world: 'MAIN'
         })
         .then(injectionResults => {
-            // Send the result back to the content script
+            if (browser.runtime.lastError) {
+              throw new Error(browser.runtime.lastError.message);
+            }
             browser.tabs.sendMessage(tabId, {
                 type: 'timeResponse',
                 payload: {
@@ -44,7 +47,6 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
         })
         .catch(err => {
             console.error("[YTSRT Background] Script injection failed:", err);
-            // IMPORTANT: Send an error response back to the content script
             browser.tabs.sendMessage(tabId, {
                 type: 'timeResponse',
                 error: err.message || "Failed to execute script."
@@ -59,16 +61,14 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
 browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (tab.url && tab.url.includes("youtube.com/watch") && changeInfo.status === 'complete') {
     
-    // Inject CSS first to prevent Flash of Unstyled Content
     browser.scripting.insertCSS({
         target: { tabId: tabId },
-        files: ["/css/overlay.css"]
+        files: ["css/overlay.css"]
     }).catch(err => console.error("[YTSRT Background] CSS injection failed.", err));
     
-    // Then inject the content script
     browser.scripting.executeScript({
       target: { tabId: tabId },
-      files: ["/scripts/content.js"]
+      files: ["scripts/content.js"]
     }).catch(err => console.error("[YTSRT Background] Content script injection failed.", err));
   }
 });
