@@ -1,4 +1,4 @@
-# Firefox Extension: Local Install Guide
+# Youtube Speedrun Timer for Multiple Sections With Gaps
 
 ## Installation
 
