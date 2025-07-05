@@ -46,7 +46,7 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
             });
         })
         .catch(err => {
-            console.error("[YTSRT Background] Script injection failed:", err);
+            console.error("[YTFT Background] Script injection failed:", err);
             browser.tabs.sendMessage(tabId, {
                 type: 'timeResponse',
                 error: err.message || "Failed to execute script."
@@ -64,11 +64,11 @@ browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     browser.scripting.insertCSS({
         target: { tabId: tabId },
         files: ["css/overlay.css"]
-    }).catch(err => console.error("[YTSRT Background] CSS injection failed.", err));
+    }).catch(err => console.error("[YTFT Background] CSS injection failed.", err));
     
     browser.scripting.executeScript({
       target: { tabId: tabId },
       files: ["scripts/content.js"]
-    }).catch(err => console.error("[YTSRT Background] Content script injection failed.", err));
+    }).catch(err => console.error("[YTFT Background] Content script injection failed.", err));
   }
 });

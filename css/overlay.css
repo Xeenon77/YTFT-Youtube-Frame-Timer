@@ -1,6 +1,6 @@
 /* css/overlay.css */
 
-#yt-speedrun-timer-container {
+#yt-frame-timer-container {
     position: fixed;
     top: 66px;
     left: 10px;
@@ -18,11 +18,15 @@
     transition: border-color 0.3s;
 }
 
-#yt-speedrun-timer-container.finished {
+#yt-frame-timer-container.finished {
     border-color: #3ea6ff;
 }
 
-.srt-title {
+#yt-frame-timer-container.ytft-hidden {
+    display: none;
+}
+
+.ytft-title {
     font-size: 16px;
     font-weight: 500;
     margin-bottom: 10px;
@@ -30,7 +34,7 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.srt-time-display {
+.ytft-time-display {
     display: flex;
     justify-content: space-between;
     padding: 4px 0;
@@ -38,33 +42,33 @@
 }
 
 /* Flashing animation for active timer - More "Violent" */
-@keyframes srt-pulse-violent {
+@keyframes ytft-pulse-violent {
     0%   { opacity: 1; color: #66ff99; }
     40%  { opacity: 0.2; color: #f1f1f1; }
     80%  { opacity: 1; color: #66ff99; }
     100% { opacity: 1; color: #66ff99; }
 }
 
-#srt-current-segment-time.srt-current-time-active {
-    animation: srt-pulse-violent 1.2s infinite ease-in-out;
+#ytft-current-segment-time.ytft-current-time-active {
+    animation: ytft-pulse-violent 1.2s infinite ease-in-out;
 }
 
-.srt-time-display span:first-child {
+.ytft-time-display span:first-child {
     color: #aaa;
 }
 
-.srt-time-display span:last-child {
+.ytft-time-display span:last-child {
     font-weight: 500;
     color: #fff;
 }
 
-.srt-splits-container {
+.ytft-splits-container {
     margin-top: 10px;
     padding-top: 10px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.srt-splits-header {
+.ytft-splits-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -72,7 +76,7 @@
     font-weight: 500;
 }
 
-#srt-copy-button {
+#ytft-copy-button {
     background: none;
     border: none;
     cursor: pointer;
@@ -82,18 +86,18 @@
     position: relative;
 }
 
-#srt-copy-button svg {
+#ytft-copy-button svg {
     fill: #aaa;
     width: 18px;
     height: 18px;
     transition: fill 0.2s;
 }
 
-#srt-copy-button:hover svg {
+#ytft-copy-button:hover svg {
     fill: #fff;
 }
 
-#srt-copy-confirm {
+#ytft-copy-confirm {
     position: absolute;
     right: 25px;
     top: 50%;
@@ -107,12 +111,12 @@
     transition: opacity 0.3s, visibility 0.3s;
 }
 
-#srt-copy-confirm.show {
+#ytft-copy-confirm.show {
     opacity: 1;
     visibility: visible;
 }
 
-#srt-splits-list {
+#ytft-splits-list {
     list-style-type: none;
     padding: 0;
     margin: 0;
@@ -122,32 +126,32 @@
     font-size: 13px;
 }
 
-#srt-splits-list li {
+#ytft-splits-list li {
     padding: 4px 2px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-#srt-splits-list li:last-child {
+#ytft-splits-list li:last-child {
     border-bottom: none;
 }
 
-.srt-split-name {
+.ytft-split-name {
     cursor: pointer;
     padding: 2px 4px;
     border-radius: 3px;
     transition: background-color 0.2s;
 }
-.srt-split-name:hover {
+.ytft-split-name:hover {
     background-color: rgba(255, 255, 255, 0.1);
 }
-.srt-split-name[contenteditable="true"] {
+.ytft-split-name[contenteditable="true"] {
     background-color: #fff;
     color: #111;
     outline: 2px solid #3ea6ff;
     cursor: text;
 }
 
-.srt-debug-log {
+.ytft-debug-log {
     margin-top: 10px;
     padding-top: 8px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -155,10 +159,10 @@
     color: #ccc;
     font-family: 'Roboto Mono', monospace;
 }
-.srt-debug-log strong {
+.ytft-debug-log strong {
     color: #f1f1f1;
 }
 
-#srt-debug-message {
+#ytft-debug-message {
     color: #8eff8e;
 }

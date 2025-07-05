@@ -2,53 +2,44 @@
 
 // --- DEFAULTS ---
 const defaultKeybindings = {
-    startReset:   { key: 'ü', code: 'BracketLeft', ctrlKey: false, altKey: false, shiftKey: false },
-    startSegment: { key: 'ö', code: 'Semicolon',   ctrlKey: false, altKey: false, shiftKey: false },
-    endSegment:   { key: 'ä', code: 'Quote',       ctrlKey: false, altKey: false, shiftKey: false },
-    endRun:       { key: '$', code: 'Digit4',      ctrlKey: false, altKey: false, shiftKey: true }
+    startReset:       { key: 'ü', code: 'BracketLeft', ctrlKey: false, altKey: false, shiftKey: false },
+    startSegment:     { key: 'ö', code: 'Semicolon',   ctrlKey: false, altKey: false, shiftKey: false },
+    endSegment:       { key: 'ä', code: 'Quote',       ctrlKey: false, altKey: false, shiftKey: false },
+    undoSplit:        { key: 'Backspace', code: 'Backspace',   ctrlKey: false, altKey: false, shiftKey: false },
+    endRun:           { key: 'c', code: 'KeyC',        ctrlKey: true,  altKey: false, shiftKey: false },
+    toggleVisibility: { key: 'h', code: 'KeyH',        ctrlKey: false, altKey: false, shiftKey: false }
 };
 
-// --- NEW: Comprehensive default preset list ---
-const defaultPresets = {
-  "active": {
-    "group": "Original Heists",
-    "sub": "Fleeca Job"
-  },
-  "data": {
-    "Original Heists": {
-      "Fleeca Job": [ "Scope Out", "Kuruma", "Finale" ],
-      "Prison Break": [ "Plane", "Bus", "Station", "Wet Work", "Finale" ],
-      "Humane Labs Raid": [ "Key Codes", "Insurgents", "EMP", "Valkyrie", "Deliver EMP", "Finale" ],
-      "Series A Funding": [ "Coke", "Trash Truck", "Bikers", "Weed", "Steal Meth", "Finale" ],
-      "Pacific Standard Job": [ "Vans", "Signal", "Hack", "Convoy", "Bikes", "Finale" ]
-    },
-    "The Doomsday Heist": {
-      "Act I: The Data Breaches": [ "Setup 1", "Setup 2", "Setup 3", "Finale" ],
-      "Act II: The Bogdan Problem": [ "Setup 1", "Setup 2", "Setup 3", "Setup 4", "Finale" ],
-      "Act III: The Doomsday Scenario": [ "Setup 1", "Setup 2", "Setup 3", "Setup 4", "Setup 5", "Setup 6", "Finale" ]
-    },
-    "The Diamond Casino Heist": {
-      "Aggressive": [ "Setup", "Entrance", "Escape" ],
-      "Big Con": [ "Setup", "Entrance", "Escape" ],
-      "Silent & Sneaky": [ "Setup", "Entrance", "Escape" ]
-    },
-    "The Cayo Perico Heist": {
-      "Solo": [ "Intel", "Prep", "Finale" ],
-      "Duo+": [ "Intel", "Prep", "Finale" ]
-    },
-    "The Contract": {
-      "Any%": [ "Investivation 1", "Investivation 2", "Investivation 3", "Finale" ]
-    },
-    "Cluckin' Bell Farm Raid": {
-      "Any%": [ "Setup 1", "Setup 2", "Finale" ]
-    },
-    "Miscellaneous & Missions": {
-      "All Casino Missions": [ "Mission 1", "Mission 2", "Mission 3", "Mission 4", "Mission 5", "Mission 6" ],
-      "All Superyacht Life Missions": [ "Mission 1", "Mission 2", "Mission 3", "Mission 4", "Mission 5", "Mission 6" ],
-      "All Project Overthrow Missions": [ "Mission 1", "Mission 2", "Mission 3", "Mission 4", "Mission 5", "Mission 6" ]
+const defaultCopyHeader = "Mod edit (Name):";
+
+// This will hold the default presets once fetched.
+let defaultPresets = null;
+
+/**
+ * Asynchronously loads the default presets from the data/DEFAULT.json file.
+ * Caches the result to avoid redundant fetching.
+ * NOTE: For this to work, 'data/DEFAULT.json' must be listed in
+ * 'web_accessible_resources' in the manifest.json file.
+ * @returns {Promise<object>} A promise that resolves to the default presets object.
+ */
+async function loadDefaultPresets() {
+    if (defaultPresets) {
+        return defaultPresets;
     }
-  }
-};
+    try {
+        const response = await fetch(browser.runtime.getURL('data/DEFAULT.json'));
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const presets = await response.json();
+        defaultPresets = presets; // Cache the successfully loaded presets
+        return presets;
+    } catch (e) {
+        console.error("YTFT: Could not load default presets from data/DEFAULT.json.", e);
+        // Return a minimal, valid fallback object to prevent crashes.
+        return { active: {}, data: { "Error": { "Could not load defaults": [] } } };
+    }
+}
 
 
 // --- DOM ELEMENTS ---
@@ -56,7 +47,9 @@ const inputs = {
     startReset: document.getElementById('startReset'),
     startSegment: document.getElementById('startSegment'),
     endSegment: document.getElementById('endSegment'),
-    endRun: document.getElementById('endRun')
+    undoSplit: document.getElementById('undoSplit'),
+    endRun: document.getElementById('endRun'),
+    toggleVisibility: document.getElementById('toggleVisibility')
 };
 const copyHeaderInput = document.getElementById('copyHeaderText');
 const presetGroupSelect = document.getElementById('preset-group-select');
@@ -75,7 +68,9 @@ function formatKeybinding(kb) {
     if (kb.altKey) parts.push('Alt');
     if (kb.shiftKey) parts.push('Shift');
     let displayKey = kb.key.toUpperCase() === ' ' ? 'Space' : kb.key;
-    if (!(parts.includes('Shift') && kb.key.length === 1 && kb.key.toUpperCase() !== kb.key)) {
+    // Don't show the letter if Shift is already present (e.g., "Shift + C" instead of "Shift + shift + c")
+    // But do show for symbols (e.g., "Shift + 4" for "$")
+    if (kb.key.length > 1 || !kb.shiftKey) {
         parts.push(displayKey);
     }
     return parts.join(' + ');
@@ -86,8 +81,10 @@ function populateGroupDropdown() {
     presetGroupSelect.innerHTML = '';
     const groups = Object.keys(tempSettings.presets.data);
     if (groups.length === 0) {
-        tempSettings.presets = JSON.parse(JSON.stringify(defaultPresets));
-        populateGroupDropdown();
+        // This case should ideally not happen if fallback works, but is a safeguard.
+        presetGroupSelect.innerHTML = `<option>No Presets</option>`;
+        subPresetSelect.innerHTML = '';
+        splitNamesTextarea.value = '';
         return;
     }
     groups.forEach(groupName => {
@@ -157,7 +154,7 @@ function handleExport() {
     
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'ytsrt-presets.json';
+    a.download = 'ytft-presets.json';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -293,26 +290,35 @@ function saveOptions() {
     });
 }
 
-function restoreOptions() {
-    browser.storage.sync.get("settings").then((data) => {
-        const s = data.settings;
-        tempSettings = {
-            keybindings: (s && s.keybindings) || JSON.parse(JSON.stringify(defaultKeybindings)),
-            copyHeaderText: (s && typeof s.copyHeaderText !== 'undefined') ? s.copyHeaderText : "",
-            presets: (s && s.presets && s.presets.data) ? s.presets : JSON.parse(JSON.stringify(defaultPresets))
-        };
-        for (const action in inputs) { inputs[action].value = formatKeybinding(tempSettings.keybindings[action]); }
-        copyHeaderInput.value = tempSettings.copyHeaderText;
-        populateGroupDropdown();
-    });
+async function restoreOptions() {
+    const data = await browser.storage.sync.get("settings");
+    const s = data.settings;
+    const loadedDefaultPresets = await loadDefaultPresets();
+
+    tempSettings = {
+        keybindings: (s && s.keybindings) || JSON.parse(JSON.stringify(defaultKeybindings)),
+        copyHeaderText: (s && typeof s.copyHeaderText !== 'undefined') ? s.copyHeaderText : defaultCopyHeader,
+        presets: (s && s.presets && s.presets.data) ? s.presets : JSON.parse(JSON.stringify(loadedDefaultPresets))
+    };
+
+    for (const action in inputs) { 
+        if (inputs[action] && tempSettings.keybindings[action]) {
+            inputs[action].value = formatKeybinding(tempSettings.keybindings[action]); 
+        }
+    }
+    copyHeaderInput.value = tempSettings.copyHeaderText;
+    populateGroupDropdown();
 }
 
-function resetToDefaults() {
+async function resetToDefaults() {
     if (!confirm("Are you sure you want to reset all settings to their defaults? This will erase all your presets.")) return;
+    
+    const loadedDefaultPresets = await loadDefaultPresets();
+
     tempSettings = {
         keybindings: JSON.parse(JSON.stringify(defaultKeybindings)),
-        copyHeaderText: "",
-        presets: JSON.parse(JSON.stringify(defaultPresets))
+        copyHeaderText: defaultCopyHeader,
+        presets: JSON.parse(JSON.stringify(loadedDefaultPresets))
     };
     saveOptions();
     restoreOptions();

@@ -105,7 +105,7 @@
     },
     "Cluckin' Bell Farm Raid": {
       "Any%": [
-        "Setup 1",
+        "Setup 3",
         "Setup 2",
         "Finale"
       ]
@@ -133,7 +133,9 @@
         "Mission 3",
         "Mission 4",
         "Mission 5",
-        "Mission 6"
+        "Mission 6",
+        "Mission 7",
+        "Mission 8"
       ]
     }
   }

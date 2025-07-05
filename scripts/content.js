@@ -1,8 +1,8 @@
 // scripts/content.js
 
 (() => {
-    if (window.hasRunYTSRT) return;
-    window.hasRunYTSRT = true;
+    if (window.hasRunYTFT) return;
+    window.hasRunYTFT = true;
 
     // --- STATE VARIABLES ---
     let timerState = 'idle', segmentStartTime = null, totalRunTime = 0, currentVideoId = null;
@@ -13,11 +13,15 @@
     let videoPlayerEl = null, liveTimeUpdateRequest = null;
 
     const defaultKeybindings = {
-        startReset:   { key: 'ü', code: 'BracketLeft', ctrlKey: false, altKey: false, shiftKey: false },
-        startSegment: { key: 'ö', code: 'Semicolon',   ctrlKey: false, altKey: false, shiftKey: false },
-        endSegment:   { key: 'ä', code: 'Quote',       ctrlKey: false, altKey: false, shiftKey: false },
-        endRun:       { key: '$', code: 'Digit4',      ctrlKey: false, altKey: false, shiftKey: true }
+        startReset:       { key: 'ü', code: 'BracketLeft', ctrlKey: false, altKey: false, shiftKey: false },
+        startSegment:     { key: 'ö', code: 'Semicolon',   ctrlKey: false, altKey: false, shiftKey: false },
+        endSegment:       { key: 'ä', code: 'Quote',       ctrlKey: false, altKey: false, shiftKey: false },
+        undoSplit:        { key: 'Backspace', code: 'Backspace',   ctrlKey: false, altKey: false, shiftKey: false },
+        endRun:           { key: 'c', code: 'KeyC',        ctrlKey: true,  altKey: false, shiftKey: false },
+        toggleVisibility: { key: 'h', code: 'KeyH',        ctrlKey: false, altKey: false, shiftKey: false }
     };
+    
+    const defaultCopyHeader = "Mod edit (Name):";
 
     // --- HELPER FUNCTIONS ---
     function logDebug(message, isError = false) {
@@ -36,28 +40,28 @@
 
     // --- UI FUNCTIONS ---
     function createUI() {
-        if (document.getElementById('yt-speedrun-timer-container')) return;
+        if (document.getElementById('yt-frame-timer-container')) return;
         uiContainer = document.createElement('div');
-        uiContainer.id = 'yt-speedrun-timer-container';
+        uiContainer.id = 'yt-frame-timer-container';
         uiContainer.innerHTML = `
-            <div class="srt-title">YT Speedrun Timer</div>
-            <div class="srt-time-display"><span>Total:</span><span id="srt-total-time">00:00.000</span></div>
-            <div class="srt-time-display"><span>Current:</span><span id="srt-current-segment-time">--:--.---</span></div>
-            <div class="srt-time-display"><span>Last:</span><span id="srt-last-segment-time">--:--.---</span></div>
-            <div class="srt-splits-container">
-                <div class="srt-splits-header"><span>Splits (Click name to edit)</span><button id="srt-copy-button" title="Copy Times"><svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg><span id="srt-copy-confirm">Copied!</span></button></div>
-                <ul id="srt-splits-list"></ul>
+            <div class="ytft-title">YT Frame Timer</div>
+            <div class="ytft-time-display"><span>Total:</span><span id="ytft-total-time">00:00.000</span></div>
+            <div class="ytft-time-display"><span>Current:</span><span id="ytft-current-segment-time">--:--.---</span></div>
+            <div class="ytft-time-display"><span>Last:</span><span id="ytft-last-segment-time">--:--.---</span></div>
+            <div class="ytft-splits-container">
+                <div class="ytft-splits-header"><span>Splits (Click name to edit)</span><button id="ytft-copy-button" title="Copy Times"><svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg><span id="ytft-copy-confirm">Copied!</span></button></div>
+                <ul id="ytft-splits-list"></ul>
             </div>
-            <div class="srt-debug-log"><strong>Status:</strong> <span id="srt-debug-message">Loading...</span></div>
+            <div class="ytft-debug-log"><strong>Status:</strong> <span id="ytft-debug-message">Loading...</span></div>
         `;
         document.body.appendChild(uiContainer);
-        totalTimeEl = document.getElementById('srt-total-time');
-        currentSegmentEl = document.getElementById('srt-current-segment-time');
-        lastSegmentEl = document.getElementById('srt-last-segment-time');
-        splitsListEl = document.getElementById('srt-splits-list');
-        copyButtonEl = document.getElementById('srt-copy-button');
-        copyConfirmEl = document.getElementById('srt-copy-confirm');
-        debugLogEl = document.getElementById('srt-debug-message');
+        totalTimeEl = document.getElementById('ytft-total-time');
+        currentSegmentEl = document.getElementById('ytft-current-segment-time');
+        lastSegmentEl = document.getElementById('ytft-last-segment-time');
+        splitsListEl = document.getElementById('ytft-splits-list');
+        copyButtonEl = document.getElementById('ytft-copy-button');
+        copyConfirmEl = document.getElementById('ytft-copy-confirm');
+        debugLogEl = document.getElementById('ytft-debug-message');
         
         copyButtonEl.addEventListener('click', handleCopy);
         splitsListEl.addEventListener('click', handleSplitNameClick);
@@ -69,7 +73,7 @@
         
         splits.forEach((split, index) => {
             const li = document.createElement('li');
-            const nameSpan = `<span class="srt-split-name" data-split-index="${index}">${split.name}</span>`;
+            const nameSpan = `<span class="ytft-split-name" data-split-index="${index}">${split.name}</span>`;
             const timeInfo = `${formatTime(split.startTime)} - ${formatTime(split.endTime)} | ${formatTime(split.duration)}`;
             li.innerHTML = `${nameSpan}: ${timeInfo}`;
             splitsListEl.appendChild(li);
@@ -88,7 +92,7 @@
     // --- HANDLER FUNCTIONS ---
     function handleStartReset() {
         if (liveTimeUpdateRequest) cancelAnimationFrame(liveTimeUpdateRequest);
-        currentSegmentEl.classList.remove('srt-current-time-active');
+        currentSegmentEl.classList.remove('ytft-current-time-active');
         
         timerState = 'running';
         segmentStartTime = null;
@@ -107,7 +111,7 @@
         timerState = 'timing_segment';
         segmentStartTime = time;
         
-        currentSegmentEl.classList.add('srt-current-time-active');
+        currentSegmentEl.classList.add('ytft-current-time-active');
         if (!videoPlayerEl) videoPlayerEl = document.getElementById('movie_player');
         if (videoPlayerEl) {
            liveTimeUpdateRequest = requestAnimationFrame(updateLiveTime);
@@ -140,7 +144,7 @@
         
         segmentStartTime = null;
         timerState = 'running';
-        currentSegmentEl.classList.remove('srt-current-time-active');
+        currentSegmentEl.classList.remove('ytft-current-time-active');
         currentSegmentEl.textContent = '--:--.---';
         logDebug(`Split! Segment time: ${formatTime(segmentDuration)}`);
         updateUI();
@@ -155,6 +159,38 @@
         handleCopy();
     }
     
+    function handleUndo() {
+        if (timerState === 'timing_segment') {
+            logDebug("Cannot undo while segment is timing. End it first.", true);
+            return;
+        }
+        if (splits.length === 0) {
+            logDebug("Nothing to undo.");
+            return;
+        }
+        
+        const undoneSplit = splits.pop();
+        totalRunTime -= undoneSplit.duration;
+        
+        // Decrement fallback counter if the undone split was a fallback
+        const wasFallback = !splitNamePresets || splits.length >= splitNamePresets.length;
+        if (wasFallback) {
+            fallbackSplitCounter = Math.max(0, fallbackSplitCounter - 1);
+        }
+
+        timerState = 'running';
+        uiContainer.classList.remove('finished');
+        
+        updateUI();
+        logDebug(`Undid last split: "${undoneSplit.name}".`);
+    }
+
+    function handleToggleVisibility() {
+        if (uiContainer) {
+            uiContainer.classList.toggle('ytft-hidden');
+        }
+    }
+
     function handleCopy() {
         let resultString = copyHeaderText ? `${copyHeaderText}\n\n` : ''; 
         splits.forEach(split => {
@@ -170,7 +206,7 @@
 
     function handleSplitNameClick(e) {
         const target = e.target;
-        if (!target.classList.contains('srt-split-name')) return;
+        if (!target.classList.contains('ytft-split-name')) return;
 
         target.contentEditable = 'true';
         target.focus();
@@ -215,7 +251,7 @@
             const s = data.settings || {};
             
             keybindings = s.keybindings || defaultKeybindings;
-            copyHeaderText = (typeof s.copyHeaderText !== 'undefined') ? s.copyHeaderText : "";
+            copyHeaderText = (typeof s.copyHeaderText !== 'undefined') ? s.copyHeaderText : defaultCopyHeader;
 
             if (s.presets && s.presets.active) {
                 const { group, sub } = s.presets.active;
@@ -231,7 +267,7 @@
             logDebug(`Storage Error. Using defaults.`, true);
             keybindings = defaultKeybindings;
             splitNamePresets = [];
-            copyHeaderText = "";
+            copyHeaderText = defaultCopyHeader;
         }
 
         document.addEventListener('keydown', (e) => {
@@ -240,12 +276,25 @@
                 const kb = keybindings[action];
                 if (kb.key === e.key && kb.code === e.code && kb.ctrlKey === e.ctrlKey && kb.altKey === e.altKey && kb.shiftKey === e.shiftKey) {
                     e.preventDefault(); e.stopPropagation();
-                    if (action === 'startReset') {
-                        handleStartReset();
-                    } else {
-                        browser.runtime.sendMessage({ type: 'getTimeRequest', requestType: action });
+                    
+                    switch(action) {
+                        case 'startReset':
+                            handleStartReset();
+                            break;
+                        case 'undoSplit':
+                            handleUndo();
+                            break;
+                        case 'toggleVisibility':
+                            handleToggleVisibility();
+                            break;
+                        // Actions requiring player time
+                        case 'startSegment':
+                        case 'endSegment':
+                        case 'endRun':
+                            browser.runtime.sendMessage({ type: 'getTimeRequest', requestType: action });
+                            break;
                     }
-                    return;
+                    return; // Exit loop once keybinding is found and handled
                 }
             }
         });

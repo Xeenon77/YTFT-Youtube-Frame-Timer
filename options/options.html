@@ -2,14 +2,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>YT Speedrun Timer Settings</title>
+    <title>YT Frame Timer Settings</title>
     <link rel="stylesheet" href="options.css">
     <meta charset="utf-8">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>YT Speedrun Timer</h1>
+            <h1>YT Frame Timer</h1>
             <p>Configure your keybindings and split presets.</p>
         </header>
 
@@ -25,8 +25,14 @@
                 <label for="endSegment">End Segment / Split:</label>
                 <input type="text" id="endSegment" class="keybind-input" readonly>
                 
+                <label for="undoSplit">Undo Last Split:</label>
+                <input type="text" id="undoSplit" class="keybind-input" readonly>
+                
                 <label for="endRun">End Run & Copy:</label>
                 <input type="text" id="endRun" class="keybind-input" readonly>
+
+                <label for="toggleVisibility">Toggle Overlay:</label>
+                <input type="text" id="toggleVisibility" class="keybind-input" readonly>
             </div>
         </section>
 
