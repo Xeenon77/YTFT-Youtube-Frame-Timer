@@ -44,88 +44,67 @@
     },
     "The Doomsday Heist": {
       "Act I: The Data Breaches": [
-        "Setup 1",
-        "Setup 2",
-        "Setup 3",
-        "Finale"
+        "Prep - Paramedic Equipment",
+        "Prep - Deluxos",
+        "Prep - Akula",
+        "Setup - Dead Courier",
+        "Setup - Signal Intercepts",
+        "Setup - Server Farm",
+        "Finale - The Data Breaches"
       ],
       "Act II: The Bogdan Problem": [
-        "Setup 1",
-        "Setup 2",
-        "Setup 3",
-        "Setup 4",
-        "Finale"
+        "Prep - Keycards",
+        "Prep - ULP Intel",
+        "Prep - Riot Control Van",
+        "Prep - Strombergs",
+        "Prep - Torpedo ECU",
+        "Setup - Avenger",
+        "Setup - Rescue ULP",
+        "Setup - Salvage Hard Drives",
+        "Setup - Submarine Recon",
+        "Heist - The Bogdan Problem"
       ],
       "Act III: The Doomsday Scenario": [
-        "Setup 1",
-        "Setup 2",
-        "Setup 3",
-        "Setup 4",
-        "Setup 5",
-        "Setup 6",
-        "Finale"
-      ]
-    },
-    "The Diamond Casino Heist": {
-      "Aggressive": [
-        "Setup",
-        "Entrance",
-        "Escape"
-      ],
-      "Big Con": [
-        "Setup",
-        "Entrance",
-        "Escape"
-      ],
-      "Silent & Sneaky": [
-        "Setup",
-        "Entrance",
-        "Escape"
-      ]
-    },
-    "The Cayo Perico Heist": {
-      "Solo": [
-        "Intel",
-        "Prep",
-        "Finale"
-      ],
-      "Duo+": [
-        "Intel",
-        "Prep",
-        "Finale"
-      ]
-    },
-    "The Contract": {
-      "Any%": [
-        "Investivation 1",
-        "Investivation 2",
-        "Investivation 3",
-        "Finale"
+        "Prep - Marked Cash",
+        "Prep - Recon",
+        "Prep - Chernobog",
+        "Prep - Flight Path",
+        "Prep - Test Site Intel",
+        "Prep - Onboard Computer",
+        "Setup - Rescue Agent 14",
+        "Setup - Escort ULP",
+        "Setup - Barrage",
+        "Setup - Khanjali",
+        "Setup - Air Defenses",
+        "Heist - The Doomsday Scenario"
       ]
     },
     "Cluckin' Bell Farm Raid": {
       "Any%": [
-        "Setup 3",
-        "Setup 2",
-        "Finale"
+        "Slush Fund",
+        "Breaking and Entering",
+        "Concealed Weapons",
+        "Hit and Run",
+        "Disorganized Crime",
+        "Scene of the Crime"
       ]
     },
     "Miscellaneous & Missions": {
       "All Casino Missions": [
-        "Mission 1",
-        "Mission 2",
-        "Mission 3",
-        "Mission 4",
-        "Mission 5",
-        "Mission 6"
+        "Loose Cheng",
+        "House Keeping",
+        "Strong Arm Tactics"
+        "Play tp Win",
+        "Bad Beat",
+        "Cashing Out"
       ],
       "All Superyacht Life Missions": [
-        "Mission 1",
-        "Mission 2",
-        "Mission 3",
-        "Mission 4",
-        "Mission 5",
-        "Mission 6"
+        "Overboard",
+        "Salvage",
+        "All Hands",
+        "Icebreaker",
+        "Bon Voyage",
+        "D-Day"
       ],
       "All Project Overthrow Missions": [
         "Mission 1",
