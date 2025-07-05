@@ -106,15 +106,34 @@
         "Bon Voyage",
         "D-Day"
       ],
+      "All ULP Missions": [
+        "Intelligence",
+        "Counterintelligence",
+        "Extraction",
+        "Asset Seizure",
+        "Operation Paper Trail",
+        "Cleanup"
+      ],
+      "All First & Last Dose Missions": [
+       "Welcome to the Troupe",
+        "Designated Driver",
+        "Fatal Incursion",
+        "Uncontrolled Substance",
+        "Make War not Love",
+        "Off the Rails",
+        "This is an Intervention",
+        "Unusual Suspects",
+        "Friedmind",
+        "Checking In",
+        "BDKD"
+      ],
       "All Project Overthrow Missions": [
-        "Mission 1",
-        "Mission 2",
-        "Mission 3",
-        "Mission 4",
-        "Mission 5",
-        "Mission 6",
-        "Mission 7",
-        "Mission 8"
+        "Reporting for Duty",
+        "Falling In",
+        "On Parade",
+        "Breaking Ranks",
+        "Unconventional Warfare",
+        "Shock & Awe"
       ]
     }
   }
