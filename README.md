@@ -1,4 +1,4 @@
-# Youtube Speedrun Timer for Multiple Sections With Gaps
+# YTFT | Youtube Frame Timer for Multiple Sections With Gaps
 
 ## Installation
 
