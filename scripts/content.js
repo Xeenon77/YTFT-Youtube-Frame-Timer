@@ -33,9 +33,20 @@
 
     function formatTime(totalSeconds) {
         if (isNaN(totalSeconds) || totalSeconds === null) return "00:00.000";
-        const m = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
-        const s = (totalSeconds % 60).toFixed(3).padStart(6, '0');
-        return `${m}:${s}`;
+        
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+    
+        const formattedMinutes = String(minutes).padStart(2, '0');
+        const formattedSeconds = seconds.toFixed(3).padStart(6, '0');
+    
+        if (hours > 0) {
+            const formattedHours = String(hours);
+            return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+        } else {
+            return `${formattedMinutes}:${formattedSeconds}`;
+        }
     }
 
     // --- UI FUNCTIONS ---
