@@ -20,8 +20,6 @@
         endRun:           { key: 'c', code: 'KeyC',        ctrlKey: true,  altKey: false, shiftKey: false },
         toggleVisibility: { key: 'h', code: 'KeyH',        ctrlKey: false, altKey: false, shiftKey: false }
     };
-    
-    const defaultCopyHeader = "Mod edit (Name):";
 
     // --- HELPER FUNCTIONS ---
     function logDebug(message, isError = false) {
@@ -203,11 +201,19 @@
     }
 
     function handleCopy() {
+        if (splits.length === 0) return;
+
         let resultString = copyHeaderText ? `${copyHeaderText}\n\n` : ''; 
         splits.forEach(split => {
             resultString += `${split.name}: ${formatTime(split.startTime)} - ${formatTime(split.endTime)} | ${formatTime(split.duration)}\n`;
         });
-        resultString += `\nTotal Run Time: ${formatTime(totalRunTime)}`;
+
+        const rtaStart = Math.min(...splits.map(s => s.startTime));
+        const rtaEnd = Math.max(...splits.map(s => s.endTime));
+        const rtaDuration = rtaEnd - rtaStart;
+
+        resultString += `\nTotal IGT: **${formatTime(totalRunTime)}**`;
+        resultString += `\n\nRTA: ${formatTime(rtaStart)} - ${formatTime(rtaEnd)} | **${formatTime(rtaDuration)}**`;
         
         navigator.clipboard.writeText(resultString.trim()).then(() => {
             copyConfirmEl.classList.add('show');
@@ -262,7 +268,7 @@
             const s = data.settings || {};
             
             keybindings = s.keybindings || defaultKeybindings;
-            copyHeaderText = (typeof s.copyHeaderText !== 'undefined') ? s.copyHeaderText : defaultCopyHeader;
+            copyHeaderText = (typeof s.copyHeaderText !== 'undefined') ? s.copyHeaderText : "Mod edit (Name):";
 
             if (s.presets && s.presets.active) {
                 const { group, sub } = s.presets.active;
@@ -278,7 +284,7 @@
             logDebug(`Storage Error. Using defaults.`, true);
             keybindings = defaultKeybindings;
             splitNamePresets = [];
-            copyHeaderText = defaultCopyHeader;
+            copyHeaderText = "Mod edit (Name):";
         }
 
         document.addEventListener('keydown', (e) => {

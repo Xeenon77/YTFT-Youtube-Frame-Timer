@@ -10,34 +10,36 @@ const defaultKeybindings = {
     toggleVisibility: { key: 'h', code: 'KeyH',        ctrlKey: false, altKey: false, shiftKey: false }
 };
 
-const defaultCopyHeader = "Mod edit (Name):";
-
-// This will hold the default presets once fetched.
-let defaultPresets = null;
+// This will hold the default settings once fetched.
+let defaultSettings = null;
 
 /**
- * Asynchronously loads the default presets from the data/DEFAULT.json file.
+ * Asynchronously loads the default settings from the data/DEFAULT.json file.
  * Caches the result to avoid redundant fetching.
  * NOTE: For this to work, 'data/DEFAULT.json' must be listed in
  * 'web_accessible_resources' in the manifest.json file.
- * @returns {Promise<object>} A promise that resolves to the default presets object.
+ * @returns {Promise<object>} A promise that resolves to the default settings object.
  */
-async function loadDefaultPresets() {
-    if (defaultPresets) {
-        return defaultPresets;
+async function loadDefaultSettings() {
+    if (defaultSettings) {
+        return defaultSettings;
     }
     try {
         const response = await fetch(browser.runtime.getURL('data/DEFAULT.json'));
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const presets = await response.json();
-        defaultPresets = presets; // Cache the successfully loaded presets
-        return presets;
+        const settings = await response.json();
+        defaultSettings = settings; // Cache the successfully loaded settings
+        return settings;
     } catch (e) {
-        console.error("YTFT: Could not load default presets from data/DEFAULT.json.", e);
+        console.error("YTFT: Could not load default settings from data/DEFAULT.json.", e);
         // Return a minimal, valid fallback object to prevent crashes.
-        return { active: {}, data: { "Error": { "Could not load defaults": [] } } };
+        return {
+            copyHeader: "Mod edit (Name):",
+            active: {},
+            data: { "Error": { "Could not load defaults": [] } }
+        };
     }
 }
 
@@ -293,12 +295,14 @@ function saveOptions() {
 async function restoreOptions() {
     const data = await browser.storage.sync.get("settings");
     const s = data.settings;
-    const loadedDefaultPresets = await loadDefaultPresets();
+    const loadedDefaults = await loadDefaultSettings();
+    const defaultPresets = { active: loadedDefaults.active, data: loadedDefaults.data };
+
 
     tempSettings = {
         keybindings: (s && s.keybindings) || JSON.parse(JSON.stringify(defaultKeybindings)),
-        copyHeaderText: (s && typeof s.copyHeaderText !== 'undefined') ? s.copyHeaderText : defaultCopyHeader,
-        presets: (s && s.presets && s.presets.data) ? s.presets : JSON.parse(JSON.stringify(loadedDefaultPresets))
+        copyHeaderText: (s && typeof s.copyHeaderText !== 'undefined') ? s.copyHeaderText : loadedDefaults.copyHeader,
+        presets: (s && s.presets && s.presets.data) ? s.presets : JSON.parse(JSON.stringify(defaultPresets))
     };
 
     for (const action in inputs) { 
@@ -313,12 +317,13 @@ async function restoreOptions() {
 async function resetToDefaults() {
     if (!confirm("Are you sure you want to reset all settings to their defaults? This will erase all your presets.")) return;
     
-    const loadedDefaultPresets = await loadDefaultPresets();
+    const loadedDefaults = await loadDefaultSettings();
+    const defaultPresets = { active: loadedDefaults.active, data: loadedDefaults.data };
 
     tempSettings = {
         keybindings: JSON.parse(JSON.stringify(defaultKeybindings)),
-        copyHeaderText: defaultCopyHeader,
-        presets: JSON.parse(JSON.stringify(loadedDefaultPresets))
+        copyHeaderText: loadedDefaults.copyHeader,
+        presets: JSON.parse(JSON.stringify(defaultPresets))
     };
     saveOptions();
     restoreOptions();
