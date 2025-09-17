@@ -1,5 +1,9 @@
 # YTFT | Youtube Frame Timer for Multiple Sections With Gaps
 
+## About
+
+The **Youtube Frame Timer for Multiple Sections With Gaps** is an ideal tool to time speedruns, especially for runs where there multiple segments with breaks (that don't contribute to the IGT) are included. The `DEFAULT.json` is at the moment prepared to time speedrun for GTA Online. You may of course edit that to your own liking, adding an categories or changing the whole thing all together to fit for the game you are active in.
+
 ## Installation
 
 This extension is designed exclusively for **Firefox**. To install it in your browser:
@@ -11,7 +15,7 @@ This extension is designed exclusively for **Firefox**. To install it in your br
 ---
 ## Current Status & Feedback
 
-Please be aware that this extension is **currently under development and may contain bugs**. Your feedback is valuable! Feel free to share your thoughts in the channel or contribute directly by improving the code.
+Please be aware that this extension is currently under development and may contain bugs. One of them being that the extension gets confused if you have multiple youtube videos open or inconsistencies when changing a category.
 
 ---
 ## Licensing & Contributions
