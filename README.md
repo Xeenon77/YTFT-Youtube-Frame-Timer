@@ -2,7 +2,7 @@
 
 ## About
 
-The **Youtube Frame Timer for Multiple Sections With Gaps** is an ideal tool to time speedruns, especially for runs where there multiple segments with breaks (that don't contribute to the IGT) are included. The `DEFAULT.json` is at the moment prepared to time speedrun for GTA Online. You may of course edit that to your own liking, adding an categories or changing the whole thing all together to fit for the game you are active in.
+The **Youtube Frame Timer for Multiple Sections With Gaps** is an ideal tool to time speedruns, especially for runs where there are multiple segments with breaks (that don't contribute to the IGT) are included. The `DEFAULT.json` is at the moment prepared to time speedrun for GTA Online. You may of course edit that to your own liking, adding an categories or changing the whole thing all together to fit for the game you are active in.
 
 ## Installation
 
