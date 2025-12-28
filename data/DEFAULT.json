@@ -111,14 +111,29 @@
         "Heist - The Doomsday Scenario"
       ]
     },
-    "Cluckin' Bell Farm Raid": {
-      "Any%": [
+    "Other Main Categories": {
+      "Cluckin' Bell Farm Raid": [
         "Slush Fund",
         "Breaking and Entering",
         "Concealed Weapons",
         "Hit and Run",
         "Disorganized Crime",
         "Scene of the Crime"
+      ],
+      "OGFA": [
+        "Up and Running",
+        "Mogul",
+        "Intel",
+        "Iron Mule",
+        "Ammunition",
+        "The Titan Job"
+      ],
+      "KnoWay Out": [
+        "Negative Press",
+        "Inside Job",
+        "Tunnel Vision",
+        "Trash Talking",
+        "A Clean Break"
       ]
     },
     "Miscellaneous & Missions": {
