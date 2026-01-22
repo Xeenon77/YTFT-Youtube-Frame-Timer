@@ -1,187 +1,308 @@
 {
-  "copyHeader": "Mod edit (name):",
+  "copyHeader": "Mod edit (Xeenon77):",
   "active": {
     "group": "Original Heists",
     "sub": "Fleeca Job"
   },
   "data": {
     "Original Heists": {
-      "Fleeca Job": [
-        "Scope Out",
-        "Kuruma",
-        "Finale"
-      ],
-      "Prison Break": [
-        "Plane",
-        "Bus",
-        "Station",
-        "Wet Work",
-        "Finale"
-      ],
-      "Humane Labs Raid": [
-        "Key Codes",
-        "Insurgents",
-        "EMP",
-        "Valkyrie",
-        "Deliver EMP",
-        "Finale"
-      ],
-      "Series A Funding": [
-        "Coke",
-        "Trash Truck",
-        "Bikers",
-        "Weed",
-        "Steal Meth",
-        "Finale"
-      ],
-      "Pacific Standard Job": [
-        "Vans",
-        "Signal",
-        "Hack",
-        "Convoy",
-        "Bikes",
-        "Finale"
-      ],
-      "All Heists / CMM": [
-        "Scope Out",
-        "Kuruma",
-        "Finale",
-        "Plane",
-        "Bus",
-        "Station",
-        "Wet Work",
-        "Finale",
-        "Key Codes",
-        "Insurgents",
-        "EMP",
-        "Valkyrie",
-        "Deliver EMP",
-        "Finale",
-        "Coke",
-        "Trash Truck",
-        "Bikers",
-        "Weed",
-        "Steal Meth",
-        "Finale",
-        "Vans",
-        "Signal",
-        "Hack",
-        "Convoy",
-        "Bikes",
-        "Finale"
-      ]
+      "Fleeca Job": {
+        "splits": [
+          "Scope Out",
+          "Kuruma",
+          "Finale"
+        ],
+        "keywords": [
+          "Fleeca",
+          "Fleeca Job"
+        ]
+      },
+      "Prison Break": {
+        "splits": [
+          "Plane",
+          "Bus",
+          "Station",
+          "Wet Work",
+          "Finale"
+        ],
+        "keywords": [
+          "Prison Break",
+          "Prison"
+        ]
+      },
+      "Humane Labs Raid": {
+        "splits": [
+          "Key Codes",
+          "Insurgents",
+          "EMP",
+          "Valkyrie",
+          "Deliver EMP",
+          "Finale"
+        ],
+        "keywords": [
+          "Humane Labs",
+          "Humane",
+          "HLR"
+        ]
+      },
+      "Series A Funding": {
+        "splits": [
+          "Coke",
+          "Trash Truck",
+          "Bikers",
+          "Weed",
+          "Steal Meth",
+          "Finale"
+        ],
+        "keywords": [
+          "Series A",
+          "Series"
+        ]
+      },
+      "Pacific Standard Job": {
+        "splits": [
+          "Vans",
+          "Signal",
+          "Hack",
+          "Convoy",
+          "Bikes",
+          "Finale"
+        ],
+        "keywords": [
+          "Pacific Standard",
+          "Pacific",
+          "PAC"
+        ]
+      },
+      "All Heists / CMM": {
+        "splits": [
+          "Scope Out",
+          "Kuruma",
+          "Finale",
+          "Plane",
+          "Bus",
+          "Station",
+          "Wet Work",
+          "Finale",
+          "Key Codes",
+          "Insurgents",
+          "EMP",
+          "Valkyrie",
+          "Deliver EMP",
+          "Finale",
+          "Coke",
+          "Trash Truck",
+          "Bikers",
+          "Weed",
+          "Steal Meth",
+          "Finale",
+          "Vans",
+          "Signal",
+          "Hack",
+          "Convoy",
+          "Bikes",
+          "Finale"
+        ],
+        "keywords": [
+          "Criminal Mastermind",
+          "CMM",
+          "All Heists"
+        ]
+      }
     },
     "The Doomsday Heist": {
-      "Act I: The Data Breaches": [
-        "Setup - Dead Courier",
-        "Setup - Signal Intercepts",
-        "Setup - Server Farm",
-        "Finale - The Data Breaches"
-      ],
-      "Act II: The Bogdan Problem": [
-        "Setup - Avenger",
-        "Setup - Rescue ULP",
-        "Setup - Salvage Hard Drives",
-        "Setup - Submarine Recon",
-        "Heist - The Bogdan Problem"
-      ],
-      "Act III: The Doomsday Scenario": [
-        "Setup - Rescue Agent 14",
-        "Setup - Escort ULP",
-        "Setup - Barrage",
-        "Setup - Khanjali",
-        "Setup - Air Defenses",
-        "Heist - The Doomsday Scenario"
-      ],
-      "All Acts / DDCMM": [
-        "Setup - Dead Courier",
-        "Setup - Signal Intercepts",
-        "Setup - Server Farm",
-        "Finale - The Data Breaches",
-        "Setup - Avenger",
-        "Setup - Rescue ULP",
-        "Setup - Salvage Hard Drives",
-        "Setup - Submarine Recon",
-        "Heist - The Bogdan Problem",
-        "Setup - Rescue Agent 14",
-        "Setup - Escort ULP",
-        "Setup - Barrage",
-        "Setup - Khanjali",
-        "Setup - Air Defenses",
-        "Heist - The Doomsday Scenario"
-      ]
+      "Act I: The Data Breaches": {
+        "splits": [
+          "Setup - Dead Courier",
+          "Setup - Signal Intercepts",
+          "Setup - Server Farm",
+          "Finale - The Data Breaches"
+        ],
+        "keywords": [
+          "Act I",
+          "Act 1",
+          "Data Breaches"
+        ]
+      },
+      "Act II: The Bogdan Problem": {
+        "splits": [
+          "Setup - Avenger",
+          "Setup - Rescue ULP",
+          "Setup - Salvage Hard Drives",
+          "Setup - Submarine Recon",
+          "Heist - The Bogdan Problem"
+        ],
+        "keywords": [
+          "Act II",
+          "Act 2",
+          "Bogdan"
+        ]
+      },
+      "Act III: The Doomsday Scenario": {
+        "splits": [
+          "Setup - Rescue Agent 14",
+          "Setup - Escort ULP",
+          "Setup - Barrage",
+          "Setup - Khanjali",
+          "Setup - Air Defenses",
+          "Heist - The Doomsday Scenario"
+        ],
+        "keywords": [
+          "Act III",
+          "Act 3",
+          "Doomsday Scenario"
+        ]
+      },
+      "All Acts / DDCMM": {
+        "splits": [
+          "Setup - Dead Courier",
+          "Setup - Signal Intercepts",
+          "Setup - Server Farm",
+          "Finale - The Data Breaches",
+          "Setup - Avenger",
+          "Setup - Rescue ULP",
+          "Setup - Salvage Hard Drives",
+          "Setup - Submarine Recon",
+          "Heist - The Bogdan Problem",
+          "Setup - Rescue Agent 14",
+          "Setup - Escort ULP",
+          "Setup - Barrage",
+          "Setup - Khanjali",
+          "Setup - Air Defenses",
+          "Heist - The Doomsday Scenario"
+        ],
+        "keywords": [
+          "Doomsday CMM",
+          "DDCMM",
+          "All Acts"
+        ]
+      }
     },
     "Other Main Categories": {
-      "Cluckin' Bell Farm Raid": [
-        "Slush Fund",
-        "Breaking and Entering",
-        "Concealed Weapons",
-        "Hit and Run",
-        "Disorganized Crime",
-        "Scene of the Crime"
-      ],
-      "OGFA": [
-        "Up and Running",
-        "Mogul",
-        "Intel",
-        "Iron Mule",
-        "Ammunition",
-        "The Titan Job"
-      ],
-      "KnoWay Out": [
-        "Negative Press",
-        "Inside Job",
-        "Tunnel Vision",
-        "Trash Talking",
-        "A Clean Break"
-      ]
+      "Cluckin' Bell Farm Raid": {
+        "splits": [
+          "Slush Fund",
+          "Breaking and Entering",
+          "Concealed Weapons",
+          "Hit and Run",
+          "Disorganized Crime",
+          "Scene of the Crime"
+        ],
+        "keywords": [
+          "Cluckin",
+          "Cluckin' Bell"
+        ]
+      },
+      "OGFA": {
+        "splits": [
+          "Up and Running",
+          "Mogul",
+          "Intel",
+          "Iron Mule",
+          "Ammunition",
+          "The Titan Job"
+        ],
+        "keywords": [
+          "OGFA",
+          "Oscar Gusman Flies Again"
+        ]
+      },
+      "KnoWay Out": {
+        "splits": [
+          "Negative Press",
+          "Inside Job",
+          "Tunnel Vision",
+          "Trash Talking",
+          "A Clean Break"
+        ],
+        "keywords": [
+          "KnoWay Out",
+          "KnoWay"
+        ]
+      }
     },
     "Miscellaneous & Missions": {
-      "All Casino Missions": [
-        "Loose Cheng",
-        "House Keeping",
-        "Strong Arm Tactics",
-        "Play to Win",
-        "Bad Beat",
-        "Cashing Out"
-      ],
-      "All Superyacht Life Missions": [
-        "Overboard",
-        "Salvage",
-        "All Hands",
-        "Icebreaker",
-        "Bon Voyage",
-        "D-Day"
-      ],
-      "All ULP Missions": [
-        "Intelligence",
-        "Counterintelligence",
-        "Extraction",
-        "Asset Seizure",
-        "Operation Paper Trail",
-        "Cleanup"
-      ],
-      "All First & Last Dose Missions": [
-       "Welcome to the Troupe",
-        "Designated Driver",
-        "Fatal Incursion",
-        "Uncontrolled Substance",
-        "Make War not Love",
-        "Off the Rails",
-        "This is an Intervention",
-        "Unusual Suspects",
-        "Friedmind",
-        "Checking In",
-        "BDKD"
-      ],
-      "All Project Overthrow Missions": [
-        "Reporting for Duty",
-        "Falling In",
-        "On Parade",
-        "Breaking Ranks",
-        "Unconventional Warfare",
-        "Shock & Awe"
-      ]
+      "All Casino Missions": {
+        "splits": [
+          "Loose Cheng",
+          "House Keeping",
+          "Strong Arm Tactics",
+          "Play to Win",
+          "Bad Beat",
+          "Cashing Out"
+        ],
+        "keywords": [
+          "Casino Missions",
+          "Casino"
+        ]
+      },
+      "All Superyacht Life Missions": {
+        "splits": [
+          "Overboard",
+          "Salvage",
+          "All Hands",
+          "Icebreaker",
+          "Bon Voyage",
+          "D-Day"
+        ],
+        "keywords": [
+          "Superyacht",
+          "Yacht Missions",
+          "Superyacht Life"
+        ]
+      },
+      "All ULP Missions": {
+        "splits": [
+          "Intelligence",
+          "Counterintelligence",
+          "Extraction",
+          "Asset Seizure",
+          "Operation Paper Trail",
+          "Cleanup"
+        ],
+        "keywords": [
+          "ULP",
+          "Paper Trail",
+          "ULP Missions"
+        ]
+      },
+      "All First & Last Dose Missions": {
+        "splits": [
+          "Welcome to the Troupe",
+          "Designated Driver",
+          "Fatal Incursion",
+          "Uncontrolled Substance",
+          "Make War not Love",
+          "Off the Rails",
+          "This is an Intervention",
+          "Unusual Suspects",
+          "Friedmind",
+          "Checking In",
+          "BDKD"
+        ],
+        "keywords": [
+          "First Dose",
+          "Last Dose",
+          "Drug Wars",
+          "First & Last Dose"
+        ]
+      },
+      "All Project Overthrow Missions": {
+        "splits": [
+          "Reporting for Duty",
+          "Falling In",
+          "On Parade",
+          "Breaking Ranks",
+          "Unconventional Warfare",
+          "Shock & Awe"
+        ],
+        "keywords": [
+          "Project Overthrow",
+          "Mercenaries",
+          "Overthrow",
+          "Project"
+        ]
+      }
     }
   }
 }

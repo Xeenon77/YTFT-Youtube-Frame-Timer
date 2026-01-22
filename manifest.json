@@ -17,7 +17,9 @@
     "*://*.youtube.com/*"
   ],
   "background": {
-    "scripts": ["scripts/background.js"]
+    "scripts": [
+      "scripts/background.js"
+    ]
   },
   "options_ui": {
     "page": "options/options.html",
@@ -33,5 +35,15 @@
     "gecko": {
       "id": "yt-speedrun-timer@example.com"
     }
-  }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "data/DEFAULT.json"
+      ],
+      "matches": [
+        "*://*.youtube.com/*"
+      ]
+    }
+  ]
 }

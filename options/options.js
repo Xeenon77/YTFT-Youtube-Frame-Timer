@@ -2,12 +2,12 @@
 
 // --- DEFAULTS ---
 const defaultKeybindings = {
-    startReset:       { key: 'ü', code: 'BracketLeft', ctrlKey: false, altKey: false, shiftKey: false },
-    startSegment:     { key: 'ö', code: 'Semicolon',   ctrlKey: false, altKey: false, shiftKey: false },
-    endSegment:       { key: 'ä', code: 'Quote',       ctrlKey: false, altKey: false, shiftKey: false },
-    undoSplit:        { key: 'Backspace', code: 'Backspace',   ctrlKey: false, altKey: false, shiftKey: false },
-    endRun:           { key: 'c', code: 'KeyC',        ctrlKey: true,  altKey: false, shiftKey: false },
-    toggleVisibility: { key: 'h', code: 'KeyH',        ctrlKey: false, altKey: false, shiftKey: false }
+    startReset: { key: 'ü', code: 'BracketLeft', ctrlKey: false, altKey: false, shiftKey: false },
+    startSegment: { key: 'ö', code: 'Semicolon', ctrlKey: false, altKey: false, shiftKey: false },
+    endSegment: { key: 'ä', code: 'Quote', ctrlKey: false, altKey: false, shiftKey: false },
+    undoSplit: { key: 'Backspace', code: 'Backspace', ctrlKey: false, altKey: false, shiftKey: false },
+    endRun: { key: 'c', code: 'KeyC', ctrlKey: true, altKey: false, shiftKey: false },
+    toggleVisibility: { key: 'h', code: 'KeyH', ctrlKey: false, altKey: false, shiftKey: false }
 };
 
 // This will hold the default settings once fetched.
@@ -131,7 +131,10 @@ function loadPresetSplits() {
     const group = presetGroupSelect.value;
     const sub = subPresetSelect.value;
     if (group && sub && tempSettings.presets.data[group] && tempSettings.presets.data[group][sub]) {
-        splitNamesTextarea.value = tempSettings.presets.data[group][sub].join('\n');
+        // Handle migration/compatibility: Check if it's an array or object
+        const presetData = tempSettings.presets.data[group][sub];
+        const splits = Array.isArray(presetData) ? presetData : presetData.splits;
+        splitNamesTextarea.value = splits.join('\n');
     } else {
         splitNamesTextarea.value = '';
     }
@@ -142,7 +145,14 @@ function saveCurrentPresetSplits() {
     const sub = tempSettings.presets.active.sub;
     if (group && sub && tempSettings.presets.data[group] && typeof tempSettings.presets.data[group][sub] !== 'undefined') {
         const splitNames = splitNamesTextarea.value.split('\n').filter(name => name.trim() !== '');
-        tempSettings.presets.data[group][sub] = splitNames;
+
+        // Preserve keywords if they exist, or initialize new object
+        let currentData = tempSettings.presets.data[group][sub];
+        if (Array.isArray(currentData)) {
+            tempSettings.presets.data[group][sub] = { splits: splitNames, keywords: [] };
+        } else {
+            currentData.splits = splitNames;
+        }
     }
 }
 
@@ -153,7 +163,7 @@ function handleExport() {
     const jsonString = JSON.stringify(presetsToExport, null, 2);
     const blob = new Blob([jsonString], { type: "application/json" });
     const url = URL.createObjectURL(blob);
-    
+
     const a = document.createElement('a');
     a.href = url;
     a.download = 'ytft-presets.json';
@@ -190,7 +200,7 @@ function handleImport(event) {
         }
     };
     reader.readAsText(file);
-    event.target.value = ''; 
+    event.target.value = '';
 }
 
 // --- EVENT LISTENERS ---
@@ -226,7 +236,7 @@ document.getElementById('add-sub-preset-btn').addEventListener('click', () => {
     const newSubName = prompt(`Enter new sub-preset name for group "${activeGroup}":`, "New Sub-Preset");
     if (!newSubName || tempSettings.presets.data[activeGroup][newSubName]) return;
     saveCurrentPresetSplits();
-    tempSettings.presets.data[activeGroup][newSubName] = [];
+    tempSettings.presets.data[activeGroup][newSubName] = { splits: [], keywords: [] };
     tempSettings.presets.active.sub = newSubName;
     populateSubPresetDropdown();
 });
@@ -237,7 +247,7 @@ document.getElementById('rename-btn').addEventListener('click', () => {
     if (!oldGroup || !oldSub) { alert("No preset selected to rename."); return; }
     const newName = prompt(`Enter new name for "${oldSub}" in "${oldGroup}":`, oldSub);
     if (!newName || newName === oldSub || tempSettings.presets.data[oldGroup][newName]) return;
-    
+
     saveCurrentPresetSplits();
     const content = tempSettings.presets.data[oldGroup][oldSub];
     delete tempSettings.presets.data[oldGroup][oldSub];
@@ -253,7 +263,7 @@ document.getElementById('delete-btn').addEventListener('click', () => {
     if (!confirm(`Are you sure you want to delete "${subToDelete}" from "${groupToDeleteFrom}"? This cannot be undone.`)) return;
 
     delete tempSettings.presets.data[groupToDeleteFrom][subToDelete];
-    
+
     if (Object.keys(tempSettings.presets.data[groupToDeleteFrom]).length === 0) {
         delete tempSettings.presets.data[groupToDeleteFrom];
         const remainingGroups = Object.keys(tempSettings.presets.data);
@@ -305,9 +315,9 @@ async function restoreOptions() {
         presets: (s && s.presets && s.presets.data) ? s.presets : JSON.parse(JSON.stringify(defaultPresets))
     };
 
-    for (const action in inputs) { 
+    for (const action in inputs) {
         if (inputs[action] && tempSettings.keybindings[action]) {
-            inputs[action].value = formatKeybinding(tempSettings.keybindings[action]); 
+            inputs[action].value = formatKeybinding(tempSettings.keybindings[action]);
         }
     }
     copyHeaderInput.value = tempSettings.copyHeaderText;
@@ -316,7 +326,7 @@ async function restoreOptions() {
 
 async function resetToDefaults() {
     if (!confirm("Are you sure you want to reset all settings to their defaults? This will erase all your presets.")) return;
-    
+
     const loadedDefaults = await loadDefaultSettings();
     const defaultPresets = { active: loadedDefaults.active, data: loadedDefaults.data };
 
