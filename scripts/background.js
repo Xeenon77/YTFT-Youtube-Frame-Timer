@@ -33,25 +33,26 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
             func: getPageData,
             world: 'MAIN'
         })
-        .then(injectionResults => {
-            if (browser.runtime.lastError) {
-              throw new Error(browser.runtime.lastError.message);
-            }
-            browser.tabs.sendMessage(tabId, {
-                type: 'timeResponse',
-                payload: {
-                    result: injectionResults[0].result,
-                    requestType: message.requestType
+            .then(injectionResults => {
+                if (browser.runtime.lastError) {
+                    throw new Error(browser.runtime.lastError.message);
                 }
+                browser.tabs.sendMessage(tabId, {
+                    type: 'timeResponse',
+                    payload: {
+                        result: injectionResults[0].result,
+                        requestType: message.requestType,
+                        songName: message.songName
+                    }
+                });
+            })
+            .catch(err => {
+                console.error("[YTFT Background] Script injection failed:", err);
+                browser.tabs.sendMessage(tabId, {
+                    type: 'timeResponse',
+                    error: err.message || "Failed to execute script."
+                }).catch(e => console.error("Failed to send error message to content script:", e));
             });
-        })
-        .catch(err => {
-            console.error("[YTFT Background] Script injection failed:", err);
-            browser.tabs.sendMessage(tabId, {
-                type: 'timeResponse',
-                error: err.message || "Failed to execute script."
-            }).catch(e => console.error("Failed to send error message to content script:", e));
-        });
 
         return true; // Indicates we will send a response asynchronously
     }
@@ -59,16 +60,16 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 // Inject content script and CSS when navigating to a YouTube watch page
 browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  if (tab.url && tab.url.includes("youtube.com/watch") && changeInfo.status === 'complete') {
-    
-    browser.scripting.insertCSS({
-        target: { tabId: tabId },
-        files: ["css/overlay.css"]
-    }).catch(err => console.error("[YTFT Background] CSS injection failed.", err));
-    
-    browser.scripting.executeScript({
-      target: { tabId: tabId },
-      files: ["scripts/content.js"]
-    }).catch(err => console.error("[YTFT Background] Content script injection failed.", err));
-  }
+    if (tab.url && tab.url.includes("youtube.com/watch") && changeInfo.status === 'complete') {
+
+        browser.scripting.insertCSS({
+            target: { tabId: tabId },
+            files: ["css/overlay.css"]
+        }).catch(err => console.error("[YTFT Background] CSS injection failed.", err));
+
+        browser.scripting.executeScript({
+            target: { tabId: tabId },
+            files: ["scripts/content.js"]
+        }).catch(err => console.error("[YTFT Background] Content script injection failed.", err));
+    }
 });

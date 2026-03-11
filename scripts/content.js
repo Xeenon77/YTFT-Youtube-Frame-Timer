@@ -8,9 +8,11 @@
     let timerState = 'idle', segmentStartTime = null, totalRunTime = 0, currentVideoId = null;
     let splits = [], keybindings = {}, splitNamePresets = [], copyHeaderText = "";
     let fallbackSplitCounter = 0;
+    let extensionMode = 'timer'; // 'timer' or 'setlist'
 
     let uiContainer, totalTimeEl, currentSegmentEl, lastSegmentEl, splitsListEl, copyButtonEl, copyConfirmEl, debugLogEl;
     let videoPlayerEl = null, liveTimeUpdateRequest = null;
+    let modeToggleEl, setlistSongsContainer;
 
     const defaultKeybindings = {
         startReset: { key: 'ü', code: 'BracketLeft', ctrlKey: false, altKey: false, shiftKey: false },
@@ -29,8 +31,25 @@
         }
     }
 
-    function formatTime(totalSeconds) {
-        if (isNaN(totalSeconds) || totalSeconds === null) return "00:00.000";
+    function formatTime(totalSeconds, roundToSeconds = false) {
+        if (isNaN(totalSeconds) || totalSeconds === null) {
+            return roundToSeconds ? "0:00" : "00:00.000";
+        }
+
+        if (roundToSeconds) {
+            totalSeconds = Math.round(totalSeconds);
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = Math.floor(totalSeconds % 60);
+            const formattedSeconds = String(seconds).padStart(2, '0');
+
+            if (hours > 0) {
+                const formattedMinutes = String(minutes).padStart(2, '0');
+                return `${hours}:${formattedMinutes}:${formattedSeconds}`;
+            } else {
+                return `${minutes}:${formattedSeconds}`;
+            }
+        }
 
         const hours = Math.floor(totalSeconds / 3600);
         const minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -52,13 +71,22 @@
         if (document.getElementById('yt-frame-timer-container')) return;
         uiContainer = document.createElement('div');
         uiContainer.id = 'yt-frame-timer-container';
+        uiContainer.className = 'ytft-mode-timer';
         uiContainer.innerHTML = `
-            <div class="ytft-title">YT Frame Timer</div>
-            <div class="ytft-time-display"><span>Total:</span><span id="ytft-total-time">00:00.000</span></div>
-            <div class="ytft-time-display"><span>Current:</span><span id="ytft-current-segment-time">--:--.---</span></div>
-            <div class="ytft-time-display"><span>Last:</span><span id="ytft-last-segment-time">--:--.---</span></div>
+            <div class="ytft-title">
+                <span>YT Frame Timer</span>
+                <button id="ytft-mode-toggle">Mode: Timer</button>
+            </div>
+            <div class="ytft-time-display ytft-timer-only"><span>Total:</span><span id="ytft-total-time">00:00.000</span></div>
+            <div class="ytft-time-display ytft-timer-only"><span>Current:</span><span id="ytft-current-segment-time">--:--.---</span></div>
+            <div class="ytft-time-display ytft-timer-only"><span>Last:</span><span id="ytft-last-segment-time">--:--.---</span></div>
+            <div id="ytft-setlist-songs" class="ytft-setlist-only"></div>
             <div class="ytft-splits-container">
-                <div class="ytft-splits-header"><span>Splits (Click name to edit)</span><button id="ytft-copy-button" title="Copy Times"><svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg><span id="ytft-copy-confirm">Copied!</span></button></div>
+                <div class="ytft-splits-header">
+                    <span class="ytft-timer-only">Splits (Click name to edit)</span>
+                    <span class="ytft-setlist-only">Setlist (Click name to edit)</span>
+                    <button id="ytft-copy-button" title="Copy Times"><svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg><span id="ytft-copy-confirm">Copied!</span></button>
+                </div>
                 <ul id="ytft-splits-list"></ul>
             </div>
             <div class="ytft-debug-log"><strong>Status:</strong> <span id="ytft-debug-message">Loading...</span></div>
@@ -71,25 +99,65 @@
         copyButtonEl = document.getElementById('ytft-copy-button');
         copyConfirmEl = document.getElementById('ytft-copy-confirm');
         debugLogEl = document.getElementById('ytft-debug-message');
+        modeToggleEl = document.getElementById('ytft-mode-toggle');
+        setlistSongsContainer = document.getElementById('ytft-setlist-songs');
 
         copyButtonEl.addEventListener('click', handleCopy);
         splitsListEl.addEventListener('click', handleSplitNameClick);
+        modeToggleEl.addEventListener('click', handleModeToggle);
+        setlistSongsContainer.addEventListener('click', handleSongButtonClick);
     }
 
     function updateUI() {
         totalTimeEl.textContent = formatTime(totalRunTime);
         splitsListEl.innerHTML = '';
 
-        splits.forEach((split, index) => {
+        const displaySplits = extensionMode === 'setlist'
+            ? [...splits].sort((a, b) => a.startTime - b.startTime)
+            : splits;
+
+        displaySplits.forEach((split, index) => {
             const li = document.createElement('li');
-            const nameSpan = `<span class="ytft-split-name" data-split-index="${index}">${split.name}</span>`;
-            const timeInfo = `${formatTime(split.startTime)} - ${formatTime(split.endTime)} | ${formatTime(split.duration)}`;
-            li.innerHTML = `${nameSpan}: ${timeInfo}`;
+
+            // To maintain correct indexing for renaming in setlist mode (which sorts them),
+            // we need the original index. However, since renaming currently assumes chronological pushing,
+            // we will find the original index.
+            const originalIndex = splits.indexOf(split);
+
+            const nameSpan = `<span class="ytft-split-name" data-split-index="${originalIndex}">${split.name}</span>`;
+
+            if (extensionMode === 'setlist') {
+                const timeInfo = formatTime(split.startTime, true);
+                li.innerHTML = `${timeInfo} ${nameSpan}`;
+            } else {
+                const timeInfo = `${formatTime(split.startTime)} - ${formatTime(split.endTime)} | ${formatTime(split.duration)}`;
+                li.innerHTML = `${nameSpan}: ${timeInfo}`;
+            }
             splitsListEl.appendChild(li);
         });
 
-        lastSegmentEl.textContent = splits.length > 0 ? formatTime(splits[splits.length - 1].duration) : '--:--.---';
+        if (extensionMode === 'timer') {
+            lastSegmentEl.textContent = splits.length > 0 ? formatTime(splits[splits.length - 1].duration) : '--:--.---';
+        }
         splitsListEl.scrollTop = splitsListEl.scrollHeight;
+    }
+
+    function renderSetlistButtons() {
+        if (!setlistSongsContainer) return;
+        setlistSongsContainer.innerHTML = '';
+
+        // Find which preset names have NOT already been used as splits
+        const usedNames = new Set(splits.map(s => s.name));
+
+        splitNamePresets.forEach(presetName => {
+            if (!usedNames.has(presetName)) {
+                const btn = document.createElement('button');
+                btn.className = 'ytft-song-btn';
+                btn.textContent = presetName;
+                btn.dataset.songName = presetName;
+                setlistSongsContainer.appendChild(btn);
+            }
+        });
     }
 
     function updateLiveTime() {
@@ -97,6 +165,26 @@
         const currentDuration = videoPlayerEl.currentTime - segmentStartTime;
         currentSegmentEl.textContent = formatTime(Math.max(0, currentDuration));
         liveTimeUpdateRequest = requestAnimationFrame(updateLiveTime);
+    }
+
+    function handleModeToggle() {
+        if (extensionMode === 'timer') {
+            extensionMode = 'setlist';
+            uiContainer.className = 'ytft-mode-setlist';
+            modeToggleEl.textContent = 'Mode: Setlist';
+            renderSetlistButtons();
+        } else {
+            extensionMode = 'timer';
+            uiContainer.className = 'ytft-mode-timer';
+            modeToggleEl.textContent = 'Mode: Timer';
+        }
+        handleStartReset(); // Clear current items on mode switch
+    }
+
+    function handleSongButtonClick(e) {
+        if (!e.target.classList.contains('ytft-song-btn')) return;
+        const songName = e.target.dataset.songName;
+        browser.runtime.sendMessage({ type: 'getTimeRequest', requestType: 'addSetlistSong', songName: songName });
     }
 
     // --- HANDLER FUNCTIONS ---
@@ -205,16 +293,26 @@
         if (splits.length === 0) return;
 
         let resultString = copyHeaderText ? `${copyHeaderText}\n\n` : '';
-        splits.forEach(split => {
-            resultString += `${split.name}: ${formatTime(split.startTime)} - ${formatTime(split.endTime)} | ${formatTime(split.duration)}\n`;
-        });
 
-        const rtaStart = Math.min(...splits.map(s => s.startTime));
-        const rtaEnd = Math.max(...splits.map(s => s.endTime));
-        const rtaDuration = rtaEnd - rtaStart;
+        if (extensionMode === 'setlist') {
+            // Sort splits by startTime to ensure chronological order in the setlist
+            const sortedSplits = [...splits].sort((a, b) => a.startTime - b.startTime);
+            sortedSplits.forEach(split => {
+                const timeInfo = formatTime(split.startTime, true);
+                resultString += `${timeInfo} ${split.name}\n`;
+            });
+        } else {
+            splits.forEach(split => {
+                resultString += `${split.name}: ${formatTime(split.startTime)} - ${formatTime(split.endTime)} | ${formatTime(split.duration)}\n`;
+            });
 
-        resultString += `\nTotal IGT: **${formatTime(totalRunTime)}**`;
-        resultString += `\n\nRTA: ${formatTime(rtaStart)} - ${formatTime(rtaEnd)} | **${formatTime(rtaDuration)}**`;
+            const rtaStart = Math.min(...splits.map(s => s.startTime));
+            const rtaEnd = Math.max(...splits.map(s => s.endTime));
+            const rtaDuration = rtaEnd - rtaStart;
+
+            resultString += `\nTotal IGT: **${formatTime(totalRunTime)}**`;
+            resultString += `\n\nRTA: ${formatTime(rtaStart)} - ${formatTime(rtaEnd)} | **${formatTime(rtaDuration)}**`;
+        }
 
         navigator.clipboard.writeText(resultString.trim()).then(() => {
             copyConfirmEl.classList.add('show');
@@ -311,6 +409,7 @@
                 splitNamePresets = [];
                 logDebug("Ready. No presets found.");
             }
+            if (extensionMode === 'setlist') renderSetlistButtons();
         } catch (e) {
             logDebug(`Init Error: ${e.message}`, true);
             keybindings = defaultKeybindings;
@@ -376,6 +475,7 @@
 
                         // Reset run
                         handleStartReset();
+                        if (extensionMode === 'setlist') renderSetlistButtons();
                         logDebug(`Switched to: ${found.sub}`);
                     } else {
                         logDebug("No matching category found in presets.", true);
@@ -420,8 +520,29 @@
                     logDebug(`Background error: ${message.error}`, true);
                     return;
                 }
+                
                 const { result, requestType } = message.payload;
                 const { time, videoId } = result;
+
+                if (requestType === 'addSetlistSong') {
+                    if (time === null) {
+                        logDebug(`Player not ready or found.`, true);
+                        return;
+                    }
+    
+                    splits.push({
+                        name: message.payload.songName || "Unknown Song",
+                        startTime: time,
+                        endTime: time,
+                        duration: 0
+                    });
+    
+                    logDebug(`Added to setlist: ${message.payload.songName}`);
+                    updateUI();
+                    if (extensionMode === 'setlist') renderSetlistButtons();
+                    return;
+                }
+
                 if (currentVideoId === null) currentVideoId = videoId;
                 if (videoId && videoId !== currentVideoId) {
                     handleStartReset();

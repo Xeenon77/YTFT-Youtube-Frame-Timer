@@ -32,6 +32,25 @@
     margin-bottom: 10px;
     padding-bottom: 5px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#ytft-mode-toggle {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+#ytft-mode-toggle:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
 }
 
 .ytft-time-display {
@@ -43,10 +62,25 @@
 
 /* Flashing animation for active timer - More "Violent" */
 @keyframes ytft-pulse-violent {
-    0%   { opacity: 1; color: #66ff99; }
-    40%  { opacity: 0.2; color: #f1f1f1; }
-    80%  { opacity: 1; color: #66ff99; }
-    100% { opacity: 1; color: #66ff99; }
+    0% {
+        opacity: 1;
+        color: #66ff99;
+    }
+
+    40% {
+        opacity: 0.2;
+        color: #f1f1f1;
+    }
+
+    80% {
+        opacity: 1;
+        color: #66ff99;
+    }
+
+    100% {
+        opacity: 1;
+        color: #66ff99;
+    }
 }
 
 #ytft-current-segment-time.ytft-current-time-active {
@@ -141,9 +175,11 @@
     border-radius: 3px;
     transition: background-color 0.2s;
 }
+
 .ytft-split-name:hover {
     background-color: rgba(255, 255, 255, 0.1);
 }
+
 .ytft-split-name[contenteditable="true"] {
     background-color: #fff;
     color: #111;
@@ -159,10 +195,46 @@
     color: #ccc;
     font-family: 'Roboto Mono', monospace;
 }
+
 .ytft-debug-log strong {
     color: #f1f1f1;
 }
 
 #ytft-debug-message {
     color: #8eff8e;
+}
+
+/* Setlist Creator Mode Specifics */
+.ytft-mode-timer .ytft-setlist-only {
+    display: none !important;
+}
+
+.ytft-mode-setlist .ytft-timer-only {
+    display: none !important;
+}
+
+#ytft-setlist-songs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.ytft-song-btn {
+    background: rgba(62, 166, 255, 0.2);
+    border: 1px solid rgba(62, 166, 255, 0.5);
+    color: #fff;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    user-select: none;
+}
+
+.ytft-song-btn:hover {
+    background: rgba(62, 166, 255, 0.4);
+    border-color: rgba(62, 166, 255, 0.8);
 }
