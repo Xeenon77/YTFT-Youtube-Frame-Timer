@@ -4,6 +4,8 @@
 
 The **Youtube Frame Timer for Multiple Sections With Gaps** is an ideal tool to time speedruns, especially for runs where there are multiple segments with breaks (that don't contribute to the IGT) are included. The `DEFAULT.json` is at the moment prepared to time speedrun for GTA Online. You may of course edit that to your own liking, adding categories or changing the whole thing all together to fit for the game you are active in.
 
+Additionally it can also create a setlist; By clicking a song name while on a youtube video, a list of timestamps and the song at said time will be generated.
+
 ## Installation
 
 This extension is designed exclusively for **Firefox**. To install it in your browser:
@@ -13,9 +15,9 @@ This extension is designed exclusively for **Firefox**. To install it in your br
 3.  Locate and select the `manifest.json` file from the **unzipped** extension folder.
 
 ---
-## Current Status & Feedback
+## Adjusting The Project for your needs
 
-Please be aware that this extension is currently under development and may contain bugs. One of them being that the extension gets confused if you have multiple youtube videos open or inconsistencies when changing a category.
+The project is by default set out to time speedruns of gta and to create setlist for the band Snow Strippers. If can change the scope by editing the `DEFAULT.json`.
 
 ---
 ## Licensing & Contributions
